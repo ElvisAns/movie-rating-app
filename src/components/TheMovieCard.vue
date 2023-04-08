@@ -64,6 +64,7 @@ defineProps({
   border: 1px solid #a81188;
   position: relative;
   background-color: bisque;
+  min-width: 300px;
 }
 
 @-webkit-keyframes pulse {

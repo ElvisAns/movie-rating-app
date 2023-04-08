@@ -1,11 +1,13 @@
 <script setup>
-import { onBeforeMount, ref, watch } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import { movieList, searchMovie } from '../requests'
 import TheLoadingIcon from './TheLoadingIcon.vue'
 import TheMovieCard from './TheMovieCard.vue'
 import _ from 'lodash'
+import { useLocalStorage } from '@vueuse/core';
 
-const movies = ref([])
+const movies = useLocalStorage("movies",[])
+
 let error_message = ref('')
 let loading = ref(false)
 let search_title = ref('')
