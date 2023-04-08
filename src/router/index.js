@@ -1,13 +1,13 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { createRouter, createWebHashHistory } from 'vue-router'
+import MovieSampleView from '../views/MovieSampleView.vue'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(),
   routes: [
     {
-      path: '/',
-      name: 'home',
-      component: HomeView
+      path: '/all-movies-sample',
+      name: 'moviesample',
+      component: MovieSampleView
     },
     {
       path: '/about',
@@ -17,7 +17,14 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue')
     }
-  ]
+  ],
+  scrollBehavior() {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({ el: '#main', behavior: 'smooth' })
+      }, 1000)
+    })
+  }
 })
 
 export default router
