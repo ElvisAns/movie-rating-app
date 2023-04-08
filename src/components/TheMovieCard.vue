@@ -1,5 +1,5 @@
 <script setup>
-import { RouterLink } from 'vue-router';
+import { RouterLink } from 'vue-router'
 defineProps({
   title: {
     type: String,
@@ -46,7 +46,9 @@ defineProps({
           <p class="card-text pt-3">
             <i class="bi bi-info-circle-fill"></i> IMDBID : <strong>{{ imdbId }}</strong>
           </p>
-          <RouterLink :to="`/single-movie/${imdbId}`" class="single-movie__view-button"><i class="bi bi-box-arrow-up-right"></i></RouterLink>
+          <RouterLink :to="`/single-movie/${imdbId}`" class="single-movie__view-button"
+            ><i class="bi bi-box-arrow-up-right"></i
+          ></RouterLink>
           <p class="card-text end">
             <small><i class="bi bi-calendar"></i> {{ year }}</small>
             <small><i class="bi bi-tag"></i>{{ type }}</small>
@@ -64,44 +66,43 @@ defineProps({
   background-color: bisque;
 }
 
-
 @-webkit-keyframes pulse {
-from {
--webkit-transform: scale3d(1, 1, 1);
-transform: scale3d(1, 1, 1);
-}
-50% {
--webkit-transform: scale3d(1.05, 1.05, 1.05);
-transform: scale3d(1.05, 1.05, 1.05);
-}
-to {
--webkit-transform: scale3d(1, 1, 1);
-transform: scale3d(1, 1, 1);
-}
+  from {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+  50% {
+    -webkit-transform: scale3d(1.05, 1.05, 1.05);
+    transform: scale3d(1.05, 1.05, 1.05);
+  }
+  to {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
 }
 @keyframes pulse {
-from {
--webkit-transform: scale3d(1, 1, 1);
-transform: scale3d(1, 1, 1);
-}
-50% {
--webkit-transform: scale3d(1.05, 1.05, 1.05);
-transform: scale3d(1.05, 1.05, 1.05);
-}
-to {
--webkit-transform: scale3d(1, 1, 1);
-transform: scale3d(1, 1, 1);
-}
+  from {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+  50% {
+    -webkit-transform: scale3d(1.05, 1.05, 1.05);
+    transform: scale3d(1.05, 1.05, 1.05);
+  }
+  to {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
 }
 .card:hover {
--webkit-animation-name: pulse;
-animation-name: pulse;
--webkit-animation-timing-function: ease-in-out;
-animation-timing-function: ease-in-out;
--webkit-animation-duration: 1s;
-animation-duration: 1s;
--webkit-animation-fill-mode: both;
-animation-fill-mode: both;
+  -webkit-animation-name: pulse;
+  animation-name: pulse;
+  -webkit-animation-timing-function: ease-in-out;
+  animation-timing-function: ease-in-out;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
 }
 .card-text small {
   background-color: #a81188;
@@ -124,16 +125,16 @@ animation-fill-mode: both;
     position: static !important;
   }
 }
-.single-movie__view-button{
-    position: absolute;
-    top:-40px;
-    right:-10px;
-    font-size: 30px;
-    background-color: black;
-    width: 50px;
-    height: 50px;
-    text-align: center;
-    border-radius: 100%;
-    color: #a81188;
+.single-movie__view-button {
+  position: absolute;
+  top: -40px;
+  right: -10px;
+  font-size: 30px;
+  background-color: black;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  border-radius: 100%;
+  color: #a81188;
 }
 </style>
