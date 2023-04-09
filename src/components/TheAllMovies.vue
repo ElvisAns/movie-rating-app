@@ -4,9 +4,9 @@ import { movieList, searchMovie } from '../requests'
 import TheLoadingIcon from './TheLoadingIcon.vue'
 import TheMovieCard from './TheMovieCard.vue'
 import _ from 'lodash'
-import { useLocalStorage } from '@vueuse/core';
+import {useMoviesStore} from '../stores/movies'
 
-const movies = useLocalStorage("movies",[])
+const moviesStore = useMoviesStore()
 
 let error_message = ref('')
 let loading = ref(false)
@@ -17,7 +17,8 @@ let sort_logic = ref([true, true]) //title , year , true => asc and false => des
 onBeforeMount(async () => {
   loading.value = true
   try {
-    movies.value = await movieList(1)
+    const list = await movieList(1)
+    moviesStore.udapteMovieList(list)
     setTimeout(() => (loading.value = false), 2000)
     error_message.value
   } catch (error) {
@@ -31,7 +32,8 @@ const submitSearch = async function () {
   if (loading.value == true) return //dont fetch data when still loading
   loading.value = true
   try {
-    movies.value = await searchMovie(1, search_title.value, search_year.value)
+    const res = await searchMovie(1, search_title.value, search_year.value)
+    moviesStore.udapteMovieList(res)
     setTimeout(() => (loading.value = false), 1000)
     error_message.value = ''
   } catch (error) {
@@ -43,11 +45,12 @@ const submitSearch = async function () {
 
 const resort_logic = (key, value) => {
   sort_logic.value[key] = value
-  movies.value = _.orderBy(
-    movies.value,
+  const ordered = _.orderBy(
+    moviesStore.movies,
     ['Title', 'Year'],
     [sort_logic.value[0] ? 'asc' : 'desc', sort_logic.value[1] ? 'asc' : 'desc']
   )
+  moviesStore.udapteMovieList(ordered)
 }
 </script>
 <template>
@@ -119,7 +122,7 @@ const resort_logic = (key, value) => {
           v-show="!loading"
           class="mt-5 row row-cols-1 row-cols-md-2 row-cols-lg-3 cols-xl-4 g-5"
         >
-          <div v-for="(movie, index) in movies" :key="index" class="col movie-single-card mx-auto">
+          <div v-for="(movie, index) in moviesStore.movies" :key="index" class="col movie-single-card mx-auto">
             <TheMovieCard
               :title="movie.Title"
               :year="movie.Year"
