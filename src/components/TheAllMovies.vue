@@ -4,9 +4,11 @@ import { movieList, searchMovie } from '../requests'
 import TheLoadingIcon from './TheLoadingIcon.vue'
 import TheMovieCard from './TheMovieCard.vue'
 import _ from 'lodash'
-import {useMoviesStore} from '../stores/movies'
+import { useMoviesStore } from '../stores/movies'
 
 const moviesStore = useMoviesStore()
+
+console.log(moviesStore.movies)
 
 let error_message = ref('')
 let loading = ref(false)
@@ -18,7 +20,7 @@ onBeforeMount(async () => {
   loading.value = true
   try {
     const list = await movieList(1)
-    moviesStore.udapteMovieList(list)
+    moviesStore.udapteMovieList(list,true)
     setTimeout(() => (loading.value = false), 2000)
     error_message.value
   } catch (error) {
@@ -32,8 +34,8 @@ const submitSearch = async function () {
   if (loading.value == true) return //dont fetch data when still loading
   loading.value = true
   try {
-    const res = await searchMovie(1, search_title.value, search_year.value)
-    moviesStore.udapteMovieList(res)
+    const result = await searchMovie(1, search_title.value, search_year.value)
+    moviesStore.udapteMovieList(result)
     setTimeout(() => (loading.value = false), 1000)
     error_message.value = ''
   } catch (error) {
@@ -122,7 +124,11 @@ const resort_logic = (key, value) => {
           v-show="!loading"
           class="mt-5 row row-cols-1 row-cols-md-2 row-cols-lg-3 cols-xl-4 g-5"
         >
-          <div v-for="(movie, index) in moviesStore.movies" :key="index" class="col movie-single-card mx-auto">
+          <div
+            v-for="(movie, index) in moviesStore.movies"
+            :key="index"
+            class="col movie-single-card mx-auto"
+          >
             <TheMovieCard
               :title="movie.Title"
               :year="movie.Year"
