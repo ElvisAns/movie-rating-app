@@ -25,14 +25,14 @@ export const useMoviesStore = defineStore({
     }
   },
   actions: {
-    udapteMovieList(list,returnfulldb=false) {
+    udapteMovieList(list, update_with_fulldb=false) {
       const to_save = JSON.parse(localStorage.getItem('movies')) ?? {}
       for (let i = 0; i < list.length; i++) {
         to_save[list[i]['imdbID']] = list[i]
       }
       localStorage.setItem('movies', JSON.stringify(to_save))
 
-      if(returnfulldb){
+      if(update_with_fulldb){
         this.movies = local_movies_list()
         return;
       }
