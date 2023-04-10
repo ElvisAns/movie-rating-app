@@ -16,9 +16,9 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue')
     },
     {
-      path : '/single-movie/:imdbID',
-      name : 'single-movie',
-      component : () => SingleMovieView
+      path: '/single-movie/:imdbID',
+      name: 'single-movie',
+      component: () => SingleMovieView
     }
   ],
   scrollBehavior() {

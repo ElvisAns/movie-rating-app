@@ -7,7 +7,6 @@ import _ from 'lodash'
 import { useMoviesStore } from '../stores/movies'
 
 const moviesStore = useMoviesStore()
-const local_movies_list = moviesStore.local_movies_list
 
 let error_message = ref('')
 let loading = ref(false)
@@ -59,10 +58,9 @@ const resort_logic = (key, value) => {
   moviesStore.udapteMovieList(ordered)
 }
 
-const rate = (imdbID, rating,index) => {
-  moviesStore.rateMovie(imdbID, rating,index)
+const rate = (imdbID, rating, index) => {
+  moviesStore.rateMovie(imdbID, rating, index)
 }
-
 </script>
 <template>
   <div class="container">
@@ -144,35 +142,39 @@ const rate = (imdbID, rating,index) => {
               :imdbId="movie.imdbID"
               :poster="movie.Poster"
               :type="movie.Type"
+              :user_review="movie.user_review"
+              :index="index"
             >
-            <div style="margin-bottom: 40px; position: relative; font-size:12px;cursor: pointer;">
-              Your Rating :
-              <i
-                @click="rate(movie.imdbID, 1,index)"
-                class="bi"
-                :class="movie.user_rating > 0 ? 'bi-star-fill icon-primary' : 'bi-star'"
-              ></i>
-              <i
-                @click="rate(movie.imdbID, 2,index)"
-                class="bi"
-                :class="movie.user_rating  > 1 ? 'bi-star-fill icon-primary' : 'bi-star'"
-              ></i>
-              <i
-                @click="rate(movie.imdbID, 3,index)"
-                class="bi"
-                :class="movie.user_rating  > 2 ? 'bi-star-fill icon-primary' : 'bi-star'"
-              ></i>
-              <i
-                @click="rate(movie.imdbID, 4,index)"
-                class="bi"
-                :class="movie.user_rating  > 3 ? 'bi-star-fill icon-primary' : 'bi-star'"
-              ></i>
-              <i
-                @click="rate(movie.imdbID, 5,index)"
-                class="bi"
-                :class="movie.user_rating  > 4 ? 'bi-star-fill icon-primary' : 'bi-star'"
-              ></i>
-            </div>
+              <div
+                style="margin-bottom: 40px; position: relative; font-size: 12px; cursor: pointer"
+              >
+                Your Rating :
+                <i
+                  @click="rate(movie.imdbID, 1, index)"
+                  class="bi"
+                  :class="movie.user_rating > 0 ? 'bi-star-fill icon-primary' : 'bi-star'"
+                ></i>
+                <i
+                  @click="rate(movie.imdbID, 2, index)"
+                  class="bi"
+                  :class="movie.user_rating > 1 ? 'bi-star-fill icon-primary' : 'bi-star'"
+                ></i>
+                <i
+                  @click="rate(movie.imdbID, 3, index)"
+                  class="bi"
+                  :class="movie.user_rating > 2 ? 'bi-star-fill icon-primary' : 'bi-star'"
+                ></i>
+                <i
+                  @click="rate(movie.imdbID, 4, index)"
+                  class="bi"
+                  :class="movie.user_rating > 3 ? 'bi-star-fill icon-primary' : 'bi-star'"
+                ></i>
+                <i
+                  @click="rate(movie.imdbID, 5, index)"
+                  class="bi"
+                  :class="movie.user_rating > 4 ? 'bi-star-fill icon-primary' : 'bi-star'"
+                ></i>
+              </div>
             </TheMovieCard>
           </div>
         </div>

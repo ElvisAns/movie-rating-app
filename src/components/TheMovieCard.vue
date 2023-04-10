@@ -1,6 +1,9 @@
 <script setup>
 import { RouterLink } from 'vue-router'
-defineProps({
+import { ref } from 'vue'
+import { useMoviesStore } from '../stores/movies'
+
+const props = defineProps({
   title: {
     type: String,
     required: true
@@ -20,8 +23,26 @@ defineProps({
   poster: {
     type: String,
     required: true
+  },
+  user_review: {
+    type: String,
+    default: ''
+  },
+  index: {
+    type: Number,
+    required: true
   }
 })
+
+const moviesStore = useMoviesStore()
+// eslint-disable-next-line vue/no-setup-props-destructure
+let user_review_form = props.user_review
+let editing = ref(false)
+
+const review = (imdbID, index) => {
+  moviesStore.reviewMovie(imdbID, user_review_form, index)
+  editing.value = false
+}
 </script>
 <template>
   <div class="card mb-3" style="max-width: 340px">
@@ -50,6 +71,37 @@ defineProps({
             ><i class="bi bi-box-arrow-up-right"></i
           ></RouterLink>
           <slot></slot>
+
+          <div>
+            <h4><i class="bi bi-person-circle"></i>Your review:</h4>
+            <div>
+              <p>{{ user_review }}</p>
+              <i
+                @click="
+                  () => {
+                    editing = !editing
+                  }
+                "
+                v-show="!editing"
+                class="bi bi-pencil text-primary"
+              ></i>
+              <div v-show="editing">
+                <div class="mb-3">
+                  <label for="exampleFormControlTextarea1" class="form-label"
+                    >Your thoughts about this movie</label
+                  >
+                  <textarea
+                    class="form-control"
+                    id="exampleFormControlTextarea1"
+                    v-model="user_review_form"
+                    rows="3"
+                  ></textarea>
+                </div>
+                <button class="btn btn-primary" @click="review(imdbId, index)">Save</button>
+              </div>
+            </div>
+          </div>
+
           <p class="card-text end">
             <small><i class="bi bi-calendar"></i> {{ year }}</small>
             <small><i class="bi bi-tag"></i>{{ type }}</small>
@@ -118,8 +170,7 @@ defineProps({
   font-weight: bolder;
 }
 .end {
-  position: absolute;
-  bottom: 20px;
+  padding-top: 20px;
 }
 .img-container {
   height: 100%;

@@ -20,10 +20,14 @@ export const useMoviesStore = defineStore({
       const to_save = JSON.parse(localStorage.getItem('movies')) ?? {}
       for (let i = 0; i < list.length; i++) {
         const existing = list[i]
-        if(to_save[list[i]['imdbID']]){
+        if (to_save[list[i]['imdbID']]) {
           if ('user_rating' in to_save[list[i]['imdbID']]) {
-          //preserve the user rating
-          existing['user_rating'] = to_save[list[i]['imdbID']]['user_rating']
+            //preserve the user rating
+            existing['user_rating'] = to_save[list[i]['imdbID']]['user_rating']
+          }
+          if ('user_review' in to_save[list[i]['imdbID']]) {
+            //preserve the user rating
+            existing['user_review'] = to_save[list[i]['imdbID']]['user_review']
           }
         }
         to_save[list[i]['imdbID']] = existing
@@ -36,10 +40,17 @@ export const useMoviesStore = defineStore({
       }
       this.movies = list
     },
-    rateMovie(imdbID, rating,index) {
+    rateMovie(imdbID, rating, index) {
       this.local_movies_list[imdbID]['user_rating'] = rating
       localStorage.setItem('movies', JSON.stringify(this.local_movies_list))
       this.movies[index].user_rating = rating
+    },
+    reviewMovie(imdbID, user_review, index) {
+      console.log('local storage', user_review, index)
+      this.local_movies_list[imdbID]['user_review'] = user_review
+      localStorage.setItem('movies', JSON.stringify(this.local_movies_list))
+      this.movies[index].user_review = user_review
+      console.log(this.local_movies_list)
     }
   }
 })
