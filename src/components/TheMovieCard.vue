@@ -73,18 +73,20 @@ const review = (imdbID, index) => {
           <slot></slot>
 
           <div>
-            <h4><i class="bi bi-person-circle"></i>Your review:</h4>
+            <h6><i class="bi bi-person-circle"></i>&nbsp;Your review:</h6>
             <div>
-              <p>{{ user_review }}</p>
+              <p>{{ user_review }}
               <i
                 @click="
                   () => {
                     editing = !editing
                   }
                 "
+                style="cursor: pointer;"
                 v-show="!editing"
                 class="bi bi-pencil text-primary"
               ></i>
+            </p>
               <div v-show="editing">
                 <div class="mb-3">
                   <label for="exampleFormControlTextarea1" class="form-label"
