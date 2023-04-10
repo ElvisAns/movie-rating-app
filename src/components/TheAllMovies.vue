@@ -7,8 +7,7 @@ import _ from 'lodash'
 import { useMoviesStore } from '../stores/movies'
 
 const moviesStore = useMoviesStore()
-
-console.log(moviesStore.movies)
+const local_movies_list = moviesStore.local_movies_list
 
 let error_message = ref('')
 let loading = ref(false)
@@ -20,7 +19,7 @@ onBeforeMount(async () => {
   loading.value = true
   try {
     const list = await movieList(1)
-    moviesStore.udapteMovieList(list,true)
+    moviesStore.udapteMovieList(list, true)
     setTimeout(() => (loading.value = false), 2000)
     error_message.value
   } catch (error) {
@@ -47,12 +46,30 @@ const submitSearch = async function () {
 
 const resort_logic = (key, value) => {
   sort_logic.value[key] = value
-  const ordered = _.orderBy(
-    moviesStore.movies,
-    ['Title', 'Year'],
-    [sort_logic.value[0] ? 'asc' : 'desc', sort_logic.value[1] ? 'asc' : 'desc']
-  )
+  let ordered = []
+  if (key == 0) {
+    //title
+    ordered = _.orderBy(moviesStore.movies, ['Title'], [sort_logic.value[0] ? 'asc' : 'desc'])
+  }
+
+  if (key == 1) {
+    //date
+    ordered = _.orderBy(moviesStore.movies, ['Year'], [sort_logic.value[1] ? 'asc' : 'desc'])
+  }
   moviesStore.udapteMovieList(ordered)
+}
+
+const rate = (imdbID, rating) => {
+  moviesStore.rateMovie(imdbID, rating)
+}
+
+const get_rating = (imdbID) => {
+  if (imdbID in local_movies_list) {
+    if ('user_rating' in local_movies_list[imdbID]) {
+      return local_movies_list[imdbID]['user_rating']
+    }
+  }
+  return 0
 }
 </script>
 <template>
@@ -102,7 +119,7 @@ const resort_logic = (key, value) => {
             ></i>
           </div>
           <div>
-            Sort by release year
+            Or by release year
             <i
               @click="() => resort_logic(1, false)"
               :class="{ 'text-primary': !sort_logic[1] }"
@@ -117,7 +134,7 @@ const resort_logic = (key, value) => {
         </div>
         <div class="mt-4 mb-2" v-show="error_message.length > 0">
           <div class="alert alert-danger d-flex align-items-start" role="alert">
-            <i class="bi bi-exclamation-diamond"></i> <span>{{ error_message }}</span>
+            <i class="bi bi-exclamation-diamond"></i>&nbsp;<span>{{ error_message }}</span>
           </div>
         </div>
         <div
@@ -135,7 +152,34 @@ const resort_logic = (key, value) => {
               :imdbId="movie.imdbID"
               :poster="movie.Poster"
               :type="movie.Type"
-            />
+            >
+              Your Rating :
+              <i
+                @click="rate(movie.imdbID, 1)"
+                class="bi"
+                :class="get_rating(movie.imdbID) > 0 ? 'bi-star-fill icon-primary' : 'bi-star'"
+              ></i>
+              <i
+                @click="rate(movie.imdbID, 2)"
+                class="bi"
+                :class="get_rating(movie.imdbID) > 1 ? 'bi-star-fill icon-primary' : 'bi-star'"
+              ></i>
+              <i
+                @click="rate(movie.imdbID, 3)"
+                class="bi"
+                :class="get_rating(movie.imdbID) > 2 ? 'bi-star-fill icon-primary' : 'bi-star'"
+              ></i>
+              <i
+                @click="rate(movie.imdbID, 4)"
+                class="bi"
+                :class="get_rating(movie.imdbID) > 3 ? 'bi-star-fill icon-primary' : 'bi-star'"
+              ></i>
+              <i
+                @click="rate(movie.imdbID, 5)"
+                class="bi"
+                :class="get_rating(movie.imdbID) > 4 ? 'bi-star-fill icon-primary' : 'bi-star'"
+              ></i>
+            </TheMovieCard>
           </div>
         </div>
       </div>
@@ -154,6 +198,9 @@ const resort_logic = (key, value) => {
 }
 .container__search-bar {
   width: 40%;
+}
+.icon-primary {
+  color: #a81188;
 }
 @media screen and (max-width: 770px) {
   .movie-single-card {

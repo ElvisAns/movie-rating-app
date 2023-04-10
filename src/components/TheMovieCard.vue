@@ -49,6 +49,7 @@ defineProps({
           <RouterLink :to="`/single-movie/${imdbId}`" class="single-movie__view-button"
             ><i class="bi bi-box-arrow-up-right"></i
           ></RouterLink>
+          <slot></slot>
           <p class="card-text end">
             <small><i class="bi bi-calendar"></i> {{ year }}</small>
             <small><i class="bi bi-tag"></i>{{ type }}</small>
@@ -95,16 +96,18 @@ defineProps({
     transform: scale3d(1, 1, 1);
   }
 }
+/*
 .card:hover {
   -webkit-animation-name: pulse;
   animation-name: pulse;
   -webkit-animation-timing-function: ease-in-out;
   animation-timing-function: ease-in-out;
-  -webkit-animation-duration: 1s;
-  animation-duration: 1s;
+  -webkit-animation-duration: 0.4s;
+  animation-duration: 0.4s;
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
 }
+*/
 .card-text small {
   background-color: #a81188;
   padding: 5px 10px;
@@ -124,6 +127,7 @@ defineProps({
 @media screen and (max-width: 780px) {
   .end {
     position: static !important;
+    margin-top: 30px;
   }
 }
 .single-movie__view-button {

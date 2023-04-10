@@ -1,42 +1,44 @@
 import { defineStore } from 'pinia'
 
-
 const local_movies_list = () => {
-    const saved_movies = JSON.parse(localStorage.getItem('movies')) ?? []
-    return Object.values(saved_movies)
+  const saved_movies = JSON.parse(localStorage.getItem('movies')) ?? {}
+  return Object.values(saved_movies)
 }
 
-const get_initial_state = ()=>{
-    return {
-        movies : local_movies_list()
-    }
+const get_initial_state = () => {
+  return {
+    movies: local_movies_list(),
+    local_movies_list: JSON.parse(localStorage.getItem('movies')) ?? {}
+  }
 }
-  
 
 export const useMoviesStore = defineStore({
   id: 'moviesStore',
   state: get_initial_state,
-  mutations: {
-    addRating(state, imdb, id, rating) {
-      state.movies[id]['user_rating'] = rating
-      const saved_movies = JSON.parse(localStorage.getItem('movies'))
-      saved_movies[imdb]['user_rating'] = rating
-      localStorage.setItem('movies', JSON.stringify(saved_movies))
-    }
-  },
   actions: {
-    udapteMovieList(list, update_with_fulldb=false) {
+    udapteMovieList(list, update_with_fulldb = false) {
       const to_save = JSON.parse(localStorage.getItem('movies')) ?? {}
       for (let i = 0; i < list.length; i++) {
-        to_save[list[i]['imdbID']] = list[i]
+        const existing = list[i]
+        if ('user_rating' in to_save[list[i]['imdbID']]) {
+          //preserve the user rating
+          existing['user_rating'] = to_save[list[i]['imdbID']]['user_rating']
+        }
+        to_save[list[i]['imdbID']] = existing
       }
       localStorage.setItem('movies', JSON.stringify(to_save))
-
-      if(update_with_fulldb){
+      this.local_movies_list = to_save //update the local state
+      if (update_with_fulldb) {
         this.movies = local_movies_list()
-        return;
+        return
       }
       this.movies = list
+    },
+    rateMovie(imdbID, rating) {
+      const cp = this.local_movies_list
+      cp[imdbID]['user_rating'] = rating
+      this.local_movies_list = { ...cp }
+      localStorage.setItem('movies', JSON.stringify(this.local_movies_list))
     }
   }
 })
