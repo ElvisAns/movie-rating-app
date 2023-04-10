@@ -20,9 +20,11 @@ export const useMoviesStore = defineStore({
       const to_save = JSON.parse(localStorage.getItem('movies')) ?? {}
       for (let i = 0; i < list.length; i++) {
         const existing = list[i]
-        if ('user_rating' in to_save[list[i]['imdbID']]) {
+        if(to_save[list[i]['imdbID']]){
+          if ('user_rating' in to_save[list[i]['imdbID']]) {
           //preserve the user rating
           existing['user_rating'] = to_save[list[i]['imdbID']]['user_rating']
+          }
         }
         to_save[list[i]['imdbID']] = existing
       }
@@ -34,11 +36,10 @@ export const useMoviesStore = defineStore({
       }
       this.movies = list
     },
-    rateMovie(imdbID, rating) {
-      const cp = this.local_movies_list
-      cp[imdbID]['user_rating'] = rating
-      this.local_movies_list = { ...cp }
+    rateMovie(imdbID, rating,index) {
+      this.local_movies_list[imdbID]['user_rating'] = rating
       localStorage.setItem('movies', JSON.stringify(this.local_movies_list))
+      this.movies[index].user_rating = rating
     }
   }
 })

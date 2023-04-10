@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import MovieSampleView from '../views/MovieSampleView.vue'
+import SingleMovieView from '../views/SingeMovieView.vue'
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -12,10 +13,12 @@ const router = createRouter({
     {
       path: '/about',
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue')
+    },
+    {
+      path : '/single-movie/:imdbID',
+      name : 'single-movie',
+      component : () => SingleMovieView
     }
   ],
   scrollBehavior() {

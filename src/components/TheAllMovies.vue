@@ -59,18 +59,10 @@ const resort_logic = (key, value) => {
   moviesStore.udapteMovieList(ordered)
 }
 
-const rate = (imdbID, rating) => {
-  moviesStore.rateMovie(imdbID, rating)
+const rate = (imdbID, rating,index) => {
+  moviesStore.rateMovie(imdbID, rating,index)
 }
 
-const get_rating = (imdbID) => {
-  if (imdbID in local_movies_list) {
-    if ('user_rating' in local_movies_list[imdbID]) {
-      return local_movies_list[imdbID]['user_rating']
-    }
-  }
-  return 0
-}
 </script>
 <template>
   <div class="container">
@@ -153,32 +145,34 @@ const get_rating = (imdbID) => {
               :poster="movie.Poster"
               :type="movie.Type"
             >
+            <div style="margin-bottom: 40px; position: relative; font-size:12px;cursor: pointer;">
               Your Rating :
               <i
-                @click="rate(movie.imdbID, 1)"
+                @click="rate(movie.imdbID, 1,index)"
                 class="bi"
-                :class="get_rating(movie.imdbID) > 0 ? 'bi-star-fill icon-primary' : 'bi-star'"
+                :class="movie.user_rating > 0 ? 'bi-star-fill icon-primary' : 'bi-star'"
               ></i>
               <i
-                @click="rate(movie.imdbID, 2)"
+                @click="rate(movie.imdbID, 2,index)"
                 class="bi"
-                :class="get_rating(movie.imdbID) > 1 ? 'bi-star-fill icon-primary' : 'bi-star'"
+                :class="movie.user_rating  > 1 ? 'bi-star-fill icon-primary' : 'bi-star'"
               ></i>
               <i
-                @click="rate(movie.imdbID, 3)"
+                @click="rate(movie.imdbID, 3,index)"
                 class="bi"
-                :class="get_rating(movie.imdbID) > 2 ? 'bi-star-fill icon-primary' : 'bi-star'"
+                :class="movie.user_rating  > 2 ? 'bi-star-fill icon-primary' : 'bi-star'"
               ></i>
               <i
-                @click="rate(movie.imdbID, 4)"
+                @click="rate(movie.imdbID, 4,index)"
                 class="bi"
-                :class="get_rating(movie.imdbID) > 3 ? 'bi-star-fill icon-primary' : 'bi-star'"
+                :class="movie.user_rating  > 3 ? 'bi-star-fill icon-primary' : 'bi-star'"
               ></i>
               <i
-                @click="rate(movie.imdbID, 5)"
+                @click="rate(movie.imdbID, 5,index)"
                 class="bi"
-                :class="get_rating(movie.imdbID) > 4 ? 'bi-star-fill icon-primary' : 'bi-star'"
+                :class="movie.user_rating  > 4 ? 'bi-star-fill icon-primary' : 'bi-star'"
               ></i>
+            </div>
             </TheMovieCard>
           </div>
         </div>
