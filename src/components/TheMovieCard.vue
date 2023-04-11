@@ -2,7 +2,7 @@
 import { RouterLink } from 'vue-router'
 import { ref } from 'vue'
 import { useMoviesStore } from '../stores/movies'
-
+import TheBookmarkMovieModal from './TheBookmarkMovieModal.vue'
 const props = defineProps({
   title: {
     type: String,
@@ -75,18 +75,19 @@ const review = (imdbID, index) => {
           <div>
             <h6><i class="bi bi-person-circle"></i>&nbsp;Your review:</h6>
             <div>
-              <p>{{ user_review }}
-              <i
-                @click="
-                  () => {
-                    editing = !editing
-                  }
-                "
-                style="cursor: pointer;"
-                v-show="!editing"
-                class="bi bi-pencil text-primary"
-              ></i>
-            </p>
+              <p>
+                {{ user_review }}
+                <i
+                  @click="
+                    () => {
+                      editing = !editing
+                    }
+                  "
+                  style="cursor: pointer"
+                  v-show="!editing"
+                  class="bi bi-pencil text-primary"
+                ></i>
+              </p>
               <div v-show="editing">
                 <div class="mb-3">
                   <label for="exampleFormControlTextarea1" class="form-label"
@@ -102,6 +103,8 @@ const review = (imdbID, index) => {
                 <button class="btn btn-primary" @click="review(imdbId, index)">Save</button>
               </div>
             </div>
+
+            <TheBookmarkMovieModal :title="title" :imdbID="imdbId" />
           </div>
 
           <p class="card-text end">
@@ -182,6 +185,10 @@ const review = (imdbID, index) => {
   .end {
     position: static !important;
     margin-top: 30px;
+  }
+  .img-container {
+    max-height: 200px;
+    width: 100%;
   }
 }
 .single-movie__view-button {

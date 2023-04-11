@@ -20,6 +20,9 @@ import { RouterLink } from 'vue-router'
             >
               Start exploring
             </RouterLink>
+            <RouterLink type="button" class="btn btn-dark btn-lg px-4 me-md-2" to="/saved-list">
+              View my saved lists
+            </RouterLink>
           </div>
         </div>
         <div class="col-10 col-sm-8 col-lg-6 mx-auto" style="perspective: 108px">

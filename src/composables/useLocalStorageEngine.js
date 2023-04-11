@@ -3,7 +3,7 @@
 export default function useLocalStorageEngine(key, initialValue) {
   // ... implementation of browser storage logic ...
   return {
-    update_local_store: (value) => {
+    flush_local_store: (value) => {
       localStorage.setItem(key, JSON.stringify(value))
     },
     get_full_list: () => {
@@ -12,7 +12,7 @@ export default function useLocalStorageEngine(key, initialValue) {
     get_meta: () => {
       return Object.values(JSON.parse(localStorage.getItem(key)) ?? [])
     },
-    add_to_local_list: (list) => {
+    add_movies_to_local_list: (list) => {
       const to_save = JSON.parse(localStorage.getItem(key)) ?? initialValue
       for (let i = 0; i < list.length; i++) {
         const existing = list[i]
@@ -29,6 +29,21 @@ export default function useLocalStorageEngine(key, initialValue) {
         to_save[list[i]['imdbID']] = existing
       }
       return to_save
+    },
+    create_category: (name) => {
+      const existing = JSON.parse(localStorage.getItem(key)) ?? initialValue
+      existing[name] = []
+      localStorage.setItem(key, JSON.stringify(existing))
+    },
+    add_to_category: (obj) => {
+      const existing = JSON.parse(localStorage.getItem(key)) ?? initialValue
+      existing[obj.category_name].push(obj)
+      localStorage.setItem(key, JSON.stringify(existing))
+    },
+    remove_entrie: (category_name, id) => {
+      const existing = JSON.parse(localStorage.getItem(key)) ?? initialValue
+      delete existing[category_name][id]
+      localStorage.setItem(key, JSON.stringify(existing))
     }
   }
 }
