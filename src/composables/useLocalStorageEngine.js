@@ -3,17 +3,17 @@
 export default function useLocalStorageEngine(key, initialValue) {
   // ... implementation of browser storage logic ...
   return {
-    update_local_store: (value) => { 
-      localStorage.setItem(key,JSON.stringify(value))
-     },
-     get_full_movies_list: () => {
-      return JSON.parse(localStorage.getItem(key))??initialValue;
+    update_local_store: (value) => {
+      localStorage.setItem(key, JSON.stringify(value))
     },
-     get_movies_meta: () => {
-      return Object.values(JSON.parse(localStorage.getItem(key))??initialValue)
+    get_full_list: () => {
+      return JSON.parse(localStorage.getItem(key)) ?? initialValue
     },
-    add_to_local_movies_list : (list) => {
-      const to_save = JSON.parse(localStorage.getItem(key))??initialValue;
+    get_meta: () => {
+      return Object.values(JSON.parse(localStorage.getItem(key)) ?? [])
+    },
+    add_to_local_list: (list) => {
+      const to_save = JSON.parse(localStorage.getItem(key)) ?? initialValue
       for (let i = 0; i < list.length; i++) {
         const existing = list[i]
         if (to_save[list[i]['imdbID']]) {
@@ -29,6 +29,6 @@ export default function useLocalStorageEngine(key, initialValue) {
         to_save[list[i]['imdbID']] = existing
       }
       return to_save
-    } 
-  };
+    }
+  }
 }
