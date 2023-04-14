@@ -28,12 +28,12 @@ export const useMoviesStore = defineStore({
     rateMovie(imdbID, rating, index) {
       this.local_movies_list[imdbID]['user_rating'] = rating
       flush_local_store(this.local_movies_list)
-      this.movies[index].user_rating = rating
+      if (index != '-1') this.movies[index].user_rating = rating
     },
     reviewMovie(imdbID, user_review, index) {
       this.local_movies_list[imdbID]['user_review'] = user_review
       flush_local_store(this.local_movies_list)
-      this.movies[index].user_review = user_review
+      if (index != '-1') this.movies[index].user_review = user_review
     }
   }
 })

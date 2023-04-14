@@ -42,7 +42,12 @@ export default function useLocalStorageEngine(key, initialValue) {
     },
     remove_entrie: (category_name, id) => {
       const existing = JSON.parse(localStorage.getItem(key)) ?? initialValue
-      delete existing[category_name][id]
+      if (existing[category_name].length > 1) {
+        const fl = existing[category_name].filter((val, index) => index != id)
+        existing[category_name] = fl
+      } else {
+        delete existing[category_name]
+      }
       localStorage.setItem(key, JSON.stringify(existing))
     }
   }

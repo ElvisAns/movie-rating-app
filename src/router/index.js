@@ -1,6 +1,4 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import MovieSampleView from '../views/MovieSampleView.vue'
-import SingleMovieView from '../views/SingeMovieView.vue'
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -8,7 +6,7 @@ const router = createRouter({
     {
       path: '/all-movies-sample',
       name: 'moviesample',
-      component: MovieSampleView
+      component: () => import('../views/MovieSampleView.vue')
     },
     {
       path: '/about',
@@ -18,7 +16,12 @@ const router = createRouter({
     {
       path: '/single-movie/:imdbID',
       name: 'single-movie',
-      component: () => SingleMovieView
+      component: () => import('../views/SingeMovieView.vue')
+    },
+    {
+      path: '/saved-list',
+      name: 'My list',
+      component: () => import('../views/MovieListView.vue')
     }
   ],
   scrollBehavior() {
