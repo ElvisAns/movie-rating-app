@@ -120,7 +120,7 @@ const del = function (l, i) {
                   ></i>
                 </div>
                 <button class="btn btn-sm btn-danger mb-3" @click="del(list_name, index)">
-                  Remove from list
+                  <i class="bi bi-trash-fill"></i>&nbsp;Remove from list
                 </button>
               </TheMovieCard>
             </div>

@@ -56,7 +56,7 @@ const addToBookmark = () => {
     <!-- Button trigger modal -->
     <button
       type="button"
-      class="btn btn-dark"
+      class="btn btn-dark btn-sm"
       data-bs-toggle="modal"
       :data-bs-target="`#${imdbID}`"
     >
