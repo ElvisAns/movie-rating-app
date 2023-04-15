@@ -125,7 +125,7 @@ const review = (imdbID, index) => {
   min-width: 300px;
 }
 @media screen and (width < 300px) {
-  .card{
+  .card {
     min-width: 100%;
   }
 }

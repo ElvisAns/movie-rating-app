@@ -49,7 +49,7 @@ const del = function (l, i) {
           v-for="(playlist, list_name, index) in bookmarkStore.local_bookmarks_list"
           :key="index"
         >
-        <hr/>
+          <hr />
           <h1><i class="bi bi-journal-bookmark-fill"></i>{{ list_name }}</h1>
           <div
             v-show="!loading"

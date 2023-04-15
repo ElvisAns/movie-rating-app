@@ -16,11 +16,11 @@ const movieList = async function (page = 1) {
   }
 }
 
-const searchMovie = async function (page = 1, title = 'a', year = '') {
+const searchMovie = async function (page = 1, search = 'a', year = '') {
   try {
     const response = await axios.get(
       `http://www.omdbapi.com/?apikey=${api_key}&type=movie&s=${
-        title.length == 0 ? 'a' : title
+        search.length == 0 ? 'a' : search
       }&page=${page}&y=${year}&plot=full`
     )
     const { data } = response
@@ -34,4 +34,29 @@ const searchMovie = async function (page = 1, title = 'a', year = '') {
   }
 }
 
-export { movieList, searchMovie }
+const singleMovie = async function (imdbID) {
+  if (!imdbID) {
+    throw new Error('Please specify a correct imdbID')
+  }
+  try {
+    const response = await axios.get(
+      `http://www.omdbapi.com/?apikey=${api_key}&type=movie&i=${imdbID}&plot=full`
+    )
+    const { data } = response
+    if (typeof data === 'string') {
+      if (data.indexOf('"Response":"False"') !== -1) {
+        throw new Error('Invalid movie ID')
+      }
+    }
+    if (typeof data === 'object') {
+      if (data.Response == 'False') {
+        throw new Error(data.Error)
+      }
+    }
+    return data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+export { movieList, searchMovie, singleMovie }
