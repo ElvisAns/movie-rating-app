@@ -4,8 +4,8 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes: [
     {
-      path : '/',
-      component : () => import('../views/HomePageExtendedView.vue'),
+      path: '/',
+      component: () => import('../views/HomePageExtendedView.vue')
     },
     {
       path: '/all-movies-sample',

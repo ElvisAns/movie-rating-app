@@ -3,6 +3,7 @@ import { onBeforeMount, ref } from 'vue'
 import { movieList, searchMovie } from '../requests'
 import TheLoadingIcon from './TheLoadingIcon.vue'
 import TheMovieCard from './TheMovieCard.vue'
+
 import _ from 'lodash'
 import { useMoviesStore } from '../stores/movies'
 

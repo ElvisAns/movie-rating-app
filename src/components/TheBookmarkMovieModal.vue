@@ -12,6 +12,10 @@ const props = defineProps({
   title: {
     type: String,
     required: true
+  },
+  buttonSize: {
+    type: String,
+    default: 'btn-sm'
   }
 })
 
@@ -56,11 +60,12 @@ const addToBookmark = () => {
     <!-- Button trigger modal -->
     <button
       type="button"
-      class="btn btn-dark btn-sm"
+      class="btn btn-dark"
+      :class="buttonSize == 'sm' ? 'btn-sm' : buttonSize"
       data-bs-toggle="modal"
       :data-bs-target="`#${imdbID}`"
     >
-      Bookmark
+      <i class="bi bi-save"></i> Bookmark
     </button>
 
     <!-- Modal -->
