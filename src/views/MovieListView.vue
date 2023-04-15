@@ -1,9 +1,7 @@
 <script setup>
 import { ref } from 'vue'
-import { movieList, searchMovie } from '../requests'
 import TheLoadingIcon from '../components/TheLoadingIcon.vue'
 import TheMovieCard from '../components/TheMovieCard.vue'
-import _ from 'lodash'
 import { useMoviesStore } from '../stores/movies'
 import { useBookmarksStore } from '../stores/bookmarks'
 
@@ -51,7 +49,8 @@ const del = function (l, i) {
           v-for="(playlist, list_name, index) in bookmarkStore.local_bookmarks_list"
           :key="index"
         >
-          <h1>{{ list_name }}</h1>
+        <hr/>
+          <h1><i class="bi bi-journal-bookmark-fill"></i>{{ list_name }}</h1>
           <div
             v-show="!loading"
             class="mt-1 row row-cols-1 row-cols-md-2 row-cols-lg-3 cols-xl-4 g-5"
@@ -59,7 +58,7 @@ const del = function (l, i) {
             <div
               v-for="(movie, index) in playlist"
               :key="movie.imdbID"
-              class="col movie-single-card mx-auto"
+              class="col movie-single-card"
             >
               <TheMovieCard
                 :title="moviesStore.local_movies_list[movie.imdbID].Title"

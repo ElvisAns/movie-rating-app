@@ -134,7 +134,7 @@ const rate = (imdbID, rating, index) => {
           <div
             v-for="(movie, index) in moviesStore.movies"
             :key="index"
-            class="col movie-single-card mx-auto"
+            class="col movie-single-card"
           >
             <TheMovieCard
               :title="movie.Title"

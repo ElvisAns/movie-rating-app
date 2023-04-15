@@ -45,7 +45,7 @@ const review = (imdbID, index) => {
 }
 </script>
 <template>
-  <div class="card mb-3" style="max-width: 340px">
+  <div class="card mb-3">
     <div class="row g-0 cc" style="min-height: 200px">
       <div class="col-md-4">
         <div class="img-container">
@@ -123,9 +123,12 @@ const review = (imdbID, index) => {
   position: relative;
   background-color: bisque;
   min-width: 300px;
-  min-height: 200px;
 }
-
+@media screen and (width < 300px) {
+  .card{
+    min-width: 100%;
+  }
+}
 @-webkit-keyframes pulse {
   from {
     -webkit-transform: scale3d(1, 1, 1);
