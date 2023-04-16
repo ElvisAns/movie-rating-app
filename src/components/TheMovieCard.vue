@@ -100,7 +100,7 @@ const review = (imdbID, index) => {
                     rows="3"
                   ></textarea>
                 </div>
-                <button class="btn btn-primary" @click="review(imdbId, index)">Save</button>
+                <button class="btn btn-primary mb-3" @click="review(imdbId, index)">Save</button>
               </div>
             </div>
 

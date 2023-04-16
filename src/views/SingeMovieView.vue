@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeMount, ref, computed, watch } from 'vue'
+import { onBeforeMount, ref, computed, watch, onUpdated } from 'vue'
 import { singleMovie, searchMovie } from '../requests/'
 import { useRoute, RouterLink } from 'vue-router'
 import TheLoadingIcon from '../components/TheLoadingIcon.vue'
@@ -7,7 +7,6 @@ import TheBookmarkMovieModal from '../components/TheBookmarkMovieModal.vue'
 import { useMoviesStore } from '../stores/movies'
 import _ from 'lodash'
 const moviesStore = useMoviesStore()
-
 const route = useRoute()
 const id = route.params.imdbID
 const thisMovie = ref({})
@@ -16,6 +15,7 @@ const loading = ref(false)
 const error = ref(false)
 const message = ref('')
 const index = ref(0)
+const topRated = ref([])
 
 localCopy.value = moviesStore.local_movies_list[id]
 
@@ -24,35 +24,13 @@ index.value = Object.keys(moviesStore.local_movies_list).indexOf(id)
 const movie_title_to_fetch = ref('')
 const mayLikeMovies = ref([])
 
-watch(
-  () => route.params.imdbID,
-  async (newId) => {
-    {
-      loading.value = true
-      try {
-        const res = await singleMovie(newId)
-        thisMovie.value = res
-        let str = res.Title.trim()
-        str = str.replace(/movie|[.:]/gi, '')
-        const keyword = _.orderBy(str.split(' '), [(o) => o.length], ['asc'])
-        movie_title_to_fetch.value = _.last(keyword)
-        fetchSimularMovie(movie_title_to_fetch.value)
-        localCopy.value = moviesStore.local_movies_list[newId]
-        index.value = Object.keys(moviesStore.local_movies_list).indexOf(newId)
-        window.scrollTo(0,0);
-        
-      } catch (e) {
-        error.value = true
-        message.value = e.message
-      }
-      setTimeout(() => {
-        loading.value = false
-      }, 1000)
-    }
-  }
-)
-
 onBeforeMount(async () => {
+  const filtered_movie__list = _.filter(moviesStore.movies, function (o) {
+    return Object.prototype.hasOwnProperty.call(o, 'user_rating')
+  })
+  const sortie_movie__list = _.orderBy(filtered_movie__list, ['user_rating'], ['desc'])
+  topRated.value = _.shuffle(_.take(sortie_movie__list, 10))
+
   loading.value = true
   try {
     const res = await singleMovie(id)
@@ -71,6 +49,37 @@ onBeforeMount(async () => {
   }, 1000)
 })
 
+watch(
+  () => route.params.imdbID,
+  async (newId) => {
+    {
+      const filtered_movie__list = _.filter(moviesStore.movies, function (o) {
+        return Object.prototype.hasOwnProperty.call(o, 'user_rating')
+      })
+      const sortie_movie__list = _.orderBy(filtered_movie__list, ['user_rating'], ['desc'])
+      topRated.value = _.shuffle(_.take(sortie_movie__list, 10))
+      loading.value = true
+      try {
+        const res = await singleMovie(newId)
+        thisMovie.value = res
+        let str = res.Title.trim()
+        str = str.replace(/movie|[.:]/gi, '')
+        const keyword = _.orderBy(str.split(' '), [(o) => o.length], ['asc'])
+        movie_title_to_fetch.value = _.last(keyword)
+        fetchSimularMovie(movie_title_to_fetch.value)
+        localCopy.value = moviesStore.local_movies_list[newId]
+        index.value = Object.keys(moviesStore.local_movies_list).indexOf(newId)
+        //window.scrollTo(0, 0)
+      } catch (e) {
+        error.value = true
+        message.value = e.message
+      }
+      setTimeout(() => {
+        loading.value = false
+      }, 1000)
+    }
+  }
+)
 const fetchSimularMovie = async (title) => {
   try {
     const res = await searchMovie(1, title)
@@ -199,8 +208,13 @@ const m_getBackground = (s) => {
           </div>
         </section>
       </div>
-      <h1 v-if="mayLikeMovies.length">You may also like</h1>
-      <div id="carouselExample" class="carousel slide" v-if="mayLikeMovies.length">
+      <h1 v-show="mayLikeMovies.length">You may also like</h1>
+      <div
+        id="alsolikeCarousel"
+        class="carousel slide mb-5"
+        data-bs-ride="carousel"
+        v-show="mayLikeMovies.length"
+      >
         <div class="carousel-inner">
           <div
             class="carousel-item"
@@ -208,32 +222,97 @@ const m_getBackground = (s) => {
             :key="movie.imdbID"
             :class="{ active: index == 0 }"
           >
-          <div style="width:100%; display:grid; place-items: center; text-align: center;">
-            <RouterLink :to="`/single-movie/${movie.imdbID}`" class="single-movie__view-button">
-              <img :src="m_getBackground(movie.Poster)" class="d-block" style="height:400px;" />
-              <div class="othermovie__title text-center">
-                {{ movie.Title }} &nbsp;<i class="bi bi-box-arrow-up-right"></i>
-              </div>
-            </RouterLink>
-          </div>
+            <div
+              style="
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+              "
+            >
+              <RouterLink
+                :to="`/single-movie/${movie.imdbID}`"
+                class="single-movie__view-button d-block"
+                :style="{ 'background-image': 'url(' + m_getBackground(movie.Poster) + ')' }"
+              >
+                <div class="othermovie__title text-center">
+                  <span>{{ movie.Title }} &nbsp;<i class="bi bi-box-arrow-up-right"></i></span>
+                </div>
+              </RouterLink>
+            </div>
           </div>
         </div>
         <button
           class="carousel-control-prev"
           type="button"
-          data-bs-target="#carouselExample"
+          data-bs-target="#alsolikeCarousel"
           data-bs-slide="prev"
         >
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <i class="bi bi-arrow-left-circle-fill"></i>
           <span class="visually-hidden">Previous</span>
         </button>
         <button
           class="carousel-control-next"
           type="button"
-          data-bs-target="#carouselExample"
+          data-bs-target="#alsolikeCarousel"
           data-bs-slide="next"
         >
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <i class="bi bi-arrow-right-circle-fill"></i>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+      <h1 v-show="topRated.length">Your top rated movie(s)</h1>
+      <div
+        id="topRatedCarousel"
+        class="carousel slide"
+        data-bs-ride="carousel"
+        v-show="topRated.length"
+      >
+        <div class="carousel-inner">
+          <div
+            class="carousel-item"
+            v-for="(movie, index) in topRated"
+            :key="movie.imdbID"
+            :class="{ active: index == 0 }"
+          >
+            <div
+              style="
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+              "
+            >
+              <RouterLink
+                :to="`/single-movie/${movie.imdbID}`"
+                class="single-movie__view-button"
+                :style="{ 'background-image': 'url(' + m_getBackground(movie.Poster) + ')' }"
+              >
+                <div class="othermovie__title text-center">
+                  <span>{{ movie.Title }} &nbsp;<i class="bi bi-box-arrow-up-right"></i></span>
+                </div>
+              </RouterLink>
+            </div>
+          </div>
+        </div>
+        <button
+          class="carousel-control-prev"
+          type="button"
+          data-bs-target="#topRatedCarousel"
+          data-bs-slide="prev"
+        >
+          <i class="bi bi-arrow-left-circle-fill"></i>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button
+          class="carousel-control-next"
+          type="button"
+          data-bs-target="#topRatedCarousel"
+          data-bs-slide="next"
+        >
+          <i class="bi bi-arrow-right-circle-fill"></i>
           <span class="visually-hidden">Next</span>
         </button>
       </div>
@@ -306,5 +385,35 @@ strong {
 }
 a {
   color: white;
+}
+.othermovie__title {
+  background-color: white;
+  color: black;
+  font-weight: 900;
+  padding: 10px;
+  border-radius: 0px 10px;
+  text-align: center;
+  position: absolute;
+  bottom: 0;
+  width: 300px;
+}
+.single-movie__view-button {
+  height: 400px;
+  width: 300px;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+@media screen and (width < 350px) {
+  .single-movie__view-button,
+  .othermovie__title {
+    width: 70vw;
+  }
+}
+.carousel-control-prev,
+.carousel-control-next {
+  font-size: 30px;
+  color: #2221e4;
+  opacity: 1;
 }
 </style>
