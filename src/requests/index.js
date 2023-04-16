@@ -6,7 +6,7 @@ const api_key = import.meta.env.VITE_API_KEY
 const movieList = async function (page = 1) {
   try {
     const response = await axios.get(
-      `http://www.omdbapi.com/?apikey=${api_key}&type=movie&y=2023&s=movie&page=${page}&plot=full`
+      `https://www.omdbapi.com/?apikey=${api_key}&type=movie&y=2023&s=movie&page=${page}&plot=full`
     )
     const { data } = response
     const { Search } = data
@@ -19,7 +19,7 @@ const movieList = async function (page = 1) {
 const searchMovie = async function (page = 1, search = 'a', year = '') {
   try {
     const response = await axios.get(
-      `http://www.omdbapi.com/?apikey=${api_key}&type=movie&s=${
+      `https://www.omdbapi.com/?apikey=${api_key}&type=movie&s=${
         search.length == 0 ? 'a' : search
       }&page=${page}&y=${year}&plot=full`
     )
@@ -40,7 +40,7 @@ const singleMovie = async function (imdbID) {
   }
   try {
     const response = await axios.get(
-      `http://www.omdbapi.com/?apikey=${api_key}&type=movie&i=${imdbID}&plot=full`
+      `https://www.omdbapi.com/?apikey=${api_key}&type=movie&i=${imdbID}&plot=full`
     )
     const { data } = response
     if (typeof data === 'string') {
