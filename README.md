@@ -1,16 +1,8 @@
-# movie-rating-app
+# Movie-rating-app
 
-This template should help get you started developing with Vue 3 in Vite.
+This is a website that will be your one stop shop for bookeeping your movies. With a large database of movie, we are sure to get you covered.
 
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
+## To run in your local machine
 
 ```sh
 npm install
@@ -28,14 +20,15 @@ npm run dev
 npm run build
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
-```
 
 ### Lint with [ESLint](https://eslint.org/)
 
 ```sh
 npm run lint
 ```
+
+
+### Technologies used :
+ - Javascript & Vue JS
+ - Bootstrap
+ - API provided By https://www.omdbapi.com/
